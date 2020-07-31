@@ -60,7 +60,7 @@
 					<dr>
 					<div class="form-group">
 						<label>포인트</label> <input name="point" type="text" class="form-control"
-							placeholder="포인트">
+							value="0">
 						<dr>
 						<div class="form-group">
 						<label>상태</label> 

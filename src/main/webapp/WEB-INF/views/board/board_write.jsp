@@ -5,18 +5,7 @@
 
 <!-- container -->
 <div id="container">
-	<!-- location_area -->
-	<div class="location_area member">
-		<div class="box_inner">
-			<h2 class="tit_page">스프링 <span class="in">in</span> 자바</h2>
-			<p class="location">고객센터 <span class="path">/</span> 공지사항 </p>
-			<ul class="page_menu clear">
-				<li><a href="javascript:;" class="on">회원가입</a></li>
-			</ul>
-		</div>
-	</div>	
-	<!-- //location_area -->
-
+	<%@ include file="../include/container_header.jsp"%>
 	<!-- bodytext_area -->
 	<div class="bodytext_area box_inner">
 		<!-- appForm -->
@@ -24,6 +13,16 @@
 			<fieldset>
 				<legend>입력 양식</legend>
 				<p class="info_pilsoo pilsoo_item">필수입력</p>
+				<div class="form-group">
+					<label>게시판 선택</label>
+					<div class="app_content">
+						<select name="bod_type" class="select_common" 
+						style="text-align-last: center; direction:inherit;" required="required">
+								<option value="${session_bod_type}">${session_bod_type}</option>
+								<option value="notice" <c:out value="${session_bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
+								<option value="gallery" <c:out value="${session_bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option>
+						</select>
+					</div>
 				<ul class="app_list">
 					<li class="clear">
 						<label for="title_lbl" class="tit_lbl pilsoo_item">제목</label>

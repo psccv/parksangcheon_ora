@@ -40,6 +40,12 @@
 					<form action="/admin/board/list">
 						<div class="input-group"
 							style="width: 500px; positon: relative; padding: 5px; right: 98%;">
+							<select name="searchBoard" class="form-control" 
+								style="text-align-last: center; direction:inherit;">
+								<option value="">게시판 선택</option>
+								<option value="notice" <c:out value="${session_bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
+								<option value="gallery" <c:out value="${session_bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option>
+							</select>
 							<select class="form-control" name="searchType"
 								style="text-align-last: center; direction:inherit;">
 								<option selected>전체</option>
@@ -62,18 +68,19 @@
 				<table class="table table-hover text-nowrap">
 					<thead>
 						<tr>
-							<th>번호</th>
+							<th>RNUM</th>
 							<th>제목</th>
 							<th>작성자</th>
 							<th>등록일</th>
 							<th>조회수</th>
+							<th>게시판타입</th>
 						</tr>
 					</thead>
 					<tbody>
 						<c:forEach items="${boardList}" var="boardVO" varStatus="status">
 							<tr>
 								<td>
-								<a href="/admin/board/view?bno=${boardVO.bno}&page=${pageVO.page}">${boardVO.bno}</a></td>
+								<a href="/admin/board/view?bno=${boardVO.bno}&page=${pageVO.page}">${boardVO.rnum}</a></td>
 								<td>
 								<a href="/admin/board/view?bno=${boardVO.bno}&page=${pageVO.page}">${boardVO.title}</a></td>
 								<td>${boardVO.writer}</td>
@@ -81,6 +88,7 @@
 								<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${boardVO.regdate}"/>
 								</td>
 								<td>${boardVO.view_count}</td>
+								<td>${boardVO.bod_type}</td>
 							</tr>
 						</c:forEach>
 					</tbody>

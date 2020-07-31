@@ -38,6 +38,16 @@
 			<!-- /.card-header -->
 			<div class="card-body">
 				<form role="form" action="/admin/board/write" method="POST" enctype="multipart/form-data">
+					<!-- select option -->
+					<div class="form-group">
+						<label>게시판 선택</label>
+						<select name="bod_type" class="form-control" 
+						style="text-align-last: center; direction:inherit;" required="required">
+								<option value="">게시판 선택</option>
+								<option value="notice" <c:out value="${session_bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
+								<option value="gallery" <c:out value="${session_bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option>
+							</select>
+					</div>
 					<!-- text input -->
 					<div class="form-group">
 						<label>제목</label> <input name="title" type="text" class="form-control"

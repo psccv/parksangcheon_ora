@@ -83,7 +83,7 @@
 							class="img-circle elevation-2" alt="User Image">
 					</div>
 					<div class="info">
-						<a href="#" class="d-block" />User02 <span
+						<a href="#" class="d-block" />${session_username} <span
 							class="right badge badge-danger">Online</span>
 					</div>
 				</div>
@@ -107,10 +107,28 @@
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>회원 관리</p>
 								</a></li>
-								<li class="nav-item"><a href="/admin/board/list"
-									class="nav-link"> <i class="far fa-circle nav-icon"></i>
-										<p>게시판 관리</p>
-								</a></li>
+								<li class="nav-item has-treeview">
+                <a href="#" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>게시판관리
+                  	<i class="right fas fa-angle-left"></i>
+                  </p>
+                </a>
+	            <ul class="nav nav-treeview">
+		              <li class="nav-item">
+		                <a href="/admin/board/list?searchBoard=notice" class="nav-link">
+		                  <i class="far fa-circle nav-icon"></i>
+		                  <p>공지사항</p>
+		                </a>
+		              </li>
+		              <li class="nav-item">
+		                <a href="/admin/board/list?searchBoard=gallery" class="nav-link">
+		                  <i class="far fa-circle nav-icon"></i>
+		                  <p>갤러리</p>
+		                </a>
+		              </li>
+	            </ul>
+              </li>
 							</ul></li>
 					</ul>
 				</nav>

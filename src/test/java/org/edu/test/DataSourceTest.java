@@ -56,7 +56,7 @@ public class DataSourceTest {
 	@Test
 	public void testInsertMember() throws Exception{
 		MemberVO memberVO = new MemberVO();
-		memberVO.setUser_id("doolipapa");
+		memberVO.setUser_id("dooli");
 		memberVO.setUser_pw("1234");
 		memberVO.setUser_name("둘리");
 		memberVO.setEmail("dooli@test.com");
@@ -68,18 +68,18 @@ public class DataSourceTest {
 	@Test
 	public void testUpdateMember() throws Exception{
 		MemberVO memberVO = new MemberVO();
-		memberVO.setUser_id("user02");
+		memberVO.setUser_id("dooli");
 		memberVO.setUser_pw("1234");
 		memberVO.setUser_name("둘리");
 		memberVO.setEmail("dooli@test.com");
-		memberVO.setPoint(999999999);
+		memberVO.setPoint(100);
 		memberVO.setEnabled(true);
-		memberVO.setLevels("ROLE_ADMIN");
+		memberVO.setLevels("ROLE_USER");
 		memberService.updateMember(memberVO);
 	}
 	@Test
 	public void testDeleteMember() throws Exception{
-		memberService.deleteMember("user02");
+		memberService.deleteMember("dooli");
 	}
 	
 }

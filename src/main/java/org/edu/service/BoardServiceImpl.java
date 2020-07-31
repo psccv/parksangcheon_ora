@@ -24,7 +24,7 @@ public class BoardServiceImpl implements IF_BoardService {
 			return;
 		}
 		for(String fileName : files) {
-			boardDAO.insertAttach(fileName);
+			boardDAO.insertAttach(fileName, boardDAO.selectTopBno());
 		}
 	}
 
@@ -52,6 +52,7 @@ public class BoardServiceImpl implements IF_BoardService {
 	@Transactional
 	@Override
 	public void deleteBoard(Integer bno) throws Exception {
+		boardDAO.deleteBoardReply(bno);
 		boardDAO.deleteAttach(bno);
 		boardDAO.deleteBoard(bno);
 	}

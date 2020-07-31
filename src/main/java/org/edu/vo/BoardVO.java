@@ -15,6 +15,8 @@ public class BoardVO {
 	private Date update_date;
 	private int view_count;
 	private int reply_count;
+	private String bod_type;
+	private Integer rnum;// 오라클에서 생성된 rownum 행번호 필드 get,set
 	
 	private String[] files;//첨부파일용 변수 첨부파일이 여러개일 수 있으니 배열로 생성
 	
@@ -72,11 +74,23 @@ public class BoardVO {
 	public void setFiles(String[] files) {
 		this.files = files;
 	}
+	public String getBod_type() {
+		return bod_type;
+	}
+	public void setBod_type(String bod_type) {
+		this.bod_type = bod_type;
+	}
 	@Override
 	public String toString() {
 		return "BoardVO [bno=" + bno + ", title=" + title + ", content=" + content + ", writer=" + writer + ", regdate="
 				+ regdate + ", update_date=" + update_date + ", view_count=" + view_count + ", reply_count="
 				+ reply_count + ", files=" + Arrays.toString(files) + "]";
+	}
+	public Integer getRnum() {
+		return rnum;
+	}
+	public void setRnum(Integer rnum) {
+		this.rnum = rnum;
 	}
 	
 		

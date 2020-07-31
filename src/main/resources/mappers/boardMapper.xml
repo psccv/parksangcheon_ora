@@ -19,28 +19,51 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<sql id="sqlWhere">
  		<if test="searchType != null">
 			AND(
-			title LIKE CONCAT('%',#{searchKeyword},'%')
+			title LIKE '%'||#{searchKeyword}||'%'
 			OR
-			content LIKE CONCAT('%',#{searchKeyword},'%')
+			content LIKE '%'||#{searchKeyword}||'%'
 			OR
-			writer LIKE CONCAT('%',#{searchKeyword},'%')
+			writer LIKE '%'||#{searchKeyword}||'%'
 			OR
-			bno LIKE CONCAT('%',#{searchKeyword},'%')
+			bno LIKE '%'||#{searchKeyword}||'%'
+			)
+		</if>
+		<if test="searchBoard != null and !searchBoard.equals('')">
+			AND(
+			bod_type = #{searchBoard}
 			)
 		</if>
  	</sql>
  	
+ 	<!-- mybatis 오라클용 추가 -->
+	<!-- 속성중에 order는 insert 이전 이후 구분하는 역할 -->
 	<insert id="insertBoard">
-		INSERT INTO tbl_board(title, content, writer, regdate, view_count, reply_count)
-		VALUES(#{title}, #{content}, #{writer}, now(),#{view_count},#{reply_count})	
+		<selectKey keyProperty="bno" resultType="int" order="BEFORE">
+			SELECT SEQ_BNO.nextval FROM DUAL
+		</selectKey>
+		INSERT INTO tbl_board(bno, title, content, writer, regdate, view_count, reply_count, bod_type)
+		VALUES(#{bno}, #{title}, #{content}, #{writer}, sysdate, #{view_count}, #{reply_count}, #{bod_type})	
 	</insert>
 	
 	<select id="selectBoard" resultType="org.edu.vo.BoardVO">		
-		SELECT * FROM tbl_board 
-		WHERE 1 = 1
-		<include refid="sqlWhere"/>
-		ORDER BY bno DESC<!-- ASC 오름차순 DESC 내림차순 -->
-		LIMIT #{startNo}, #{perPageNum}
+		<![CDATA[
+		SELECT T_Z.*
+		FROM
+		    (
+		    SELECT ROWNUM AS RNUM, T_A.*
+		    FROM
+		        (SELECT * FROM TBL_BOARD 
+		        WHERE 1 = 1
+		]]>
+		        <include refid="sqlWhere"></include>
+		<![CDATA[
+		        ORDER BY BNO DESC
+		        ) T_A
+		    WHERE ROWNUM <= (#{startNo}/#{perPageNum}+1) * #{perPageNum}
+		    ) T_Z
+		 WHERE
+		    T_Z.RNUM > (#{startNo}/#{perPageNum}) * #{perPageNum}
+		]]>
 	</select>
 	
 	<select id="countBno" resultType="int">
@@ -54,9 +77,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		title = #{title},
 		content = #{content},
 		writer = #{writer},
-		update_date = now(),
+		update_date = sysdate,
 		view_count = #{view_count},
-		reply_count = #{reply_count}
+		reply_count = #{reply_count},
+		bod_type = #{bod_type}
 		WHERE bno = #{bno}
 	</update>
 	
@@ -79,9 +103,21 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	<insert id="insertAttach">
 		INSERT INTO tbl_attach(full_name, bno) VALUES(#{fullName}, LAST_INSERT_ID())
 	</insert> -->
-	<!-- HSql 방식 -->
+	<!-- HSql 방식 
 	<insert id="insertAttach">
 		INSERT INTO tbl_attach(full_name, bno) VALUES (#{fullname},(SELECT TOP 1 bno FROM tbl_board ORDER BY bno DESC))
+	</insert>
+	-->
+	<!-- 첨부파일 Oracle용 에서 사용되는 최근 게시물 번호 -->
+	<select id="selectTopBno" resultType="int">
+		SELECT bno FROM (
+    		SELECT bno FROM tbl_board ORDER BY bno DESC
+		) T_A
+		WHERE ROWNUM = 1
+	</select>
+	<!-- Oracle 방식 --> 
+	<insert id="insertAttach">
+		INSERT INTO tbl_attach(full_name, bno) VALUES (#{fullname}, #{bno})
 	</insert>
 	
 	<select id="selectAttach" resultType="string">
@@ -93,6 +129,12 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 	</delete>
 	
 	<insert id="updateAttach">
-		INSERT INTO tbl_attach(full_name,bno) VALUES(#{fullname}, #{bno})
+		INSERT INTO tbl_attach(full_name, bno) VALUES(#{fullname}, #{bno})
 	</insert>
+	
+	<!-- 게시판에 연결된 댓글 삭제 -->
+	<delete id="deleteBoardReply">
+		DELETE FROM tbl_reply WHERE bno = #{bno}
+	</delete>
+	
 </mapper>

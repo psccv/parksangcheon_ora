@@ -62,10 +62,14 @@ public class HomeController {
 		}
 		pageVO.setPerPageNum(5);//1페이지당 보여줄 게시물 수 강제지정
 		pageVO.setTotalCount(boardService.countBno(pageVO));//강제로 입력한 값을 쿼리로 대체OK.
-		List<BoardVO> list = boardService.selectBoard(pageVO);
-		//첨부파일 출력 때문에 추가 Start
+		
+		pageVO.setSearchBoard("gallery");
+		List<BoardVO> listGallery = boardService.selectBoard(pageVO);
+		pageVO.setSearchBoard("notice");
+		List<BoardVO> listNotice = boardService.selectBoard(pageVO);
+		//첨부파일 출력 때문에 추가 Start -- 갤러리에서만 필요
 		List<BoardVO> boardListFiles = new ArrayList<BoardVO>();
-		for(BoardVO vo:list) {
+		for(BoardVO vo:listGallery) {
 			List<String> files = boardService.selectAttach(vo.getBno());
 			String[] filenames = new String[files.size()];
 			int cnt = 0;
@@ -77,7 +81,8 @@ public class HomeController {
 		}
 		model.addAttribute("extNameArray", fileDataUtil.getExtNameArray());//첨부파일이 이미지인지 문서파일인 구분용 jsp변수
 		//첨부파일 출력 때문에 추가 End
-		model.addAttribute("boardList", boardListFiles);		
+		model.addAttribute("boardListGallery", boardListFiles);
+		model.addAttribute("boardListNotice", listNotice);
 		return "home";
 	}
 		
@@ -223,7 +228,15 @@ public class HomeController {
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
-	public String boardList(@ModelAttribute("pageVO") PageVO pageVO, Locale locale, Model model) throws Exception {
+	public String boardList(@ModelAttribute("pageVO") PageVO pageVO, Locale locale, Model model, HttpServletRequest request) throws Exception {
+		//초기 메뉴를 클릭시 /board/list?searchBoard=notice 데이터 전송
+		HttpSession session = request.getSession();
+		if(pageVO.getSearchBoard() != null) {
+			session.setAttribute("session_bod_type", pageVO.getSearchBoard());
+		}else {
+			//일반링크 클릭시 /board/view?page=2... 데이터 전송
+			pageVO.setSearchBoard((String)session.getAttribute("session_bod_type"));
+		}
 		//PageVO pageVO = new PageVO();//매개변수로 받기전 테스트용
 		if(pageVO.getPage() == null) {
 			pageVO.setPage(1);//초기 page변수값 지정
@@ -246,7 +259,15 @@ public class HomeController {
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/board/view", method = RequestMethod.GET)
-	public String boardView(@ModelAttribute("pageVO") PageVO pageVO, @RequestParam("bno") Integer bno,Locale locale, Model model) throws Exception {
+	public String boardView(@ModelAttribute("pageVO") PageVO pageVO, @RequestParam("bno") Integer bno,Locale locale, Model model, HttpServletRequest request) throws Exception {
+		//초기 메뉴를 클릭시 /board/list?searchBoard=notice 데이터 전송
+		HttpSession session = request.getSession();
+		if(pageVO.getSearchBoard() != null) {
+			session.setAttribute("session_bod_type", pageVO.getSearchBoard());
+		}else {
+			//일반링크 클릭시 /board/view?page=2... 데이터 전송
+			pageVO.setSearchBoard((String)session.getAttribute("session_bod_type"));
+		}
 		BoardVO boardVO = boardService.viewBoard(bno);
 		//여기서 부터 첨부파일명 때문에 추가
 		List<String> files = boardService.selectAttach(bno);

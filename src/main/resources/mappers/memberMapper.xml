@@ -19,26 +19,37 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
  	<sql id="sqlWhere">
  		<if test="searchType != null">
 			AND(
-			user_id LIKE CONCAT('%',#{searchKeyword},'%')
+			user_id LIKE '%'||#{searchKeyword}||'%'
 			OR
-			user_name LIKE CONCAT('%',#{searchKeyword},'%')
+			user_name LIKE '%'||#{searchKeyword}||'%'
 			OR
-			email LIKE CONCAT('%',#{searchKeyword},'%')
+			email LIKE '%'||#{searchKeyword}||'%'
 			)
 		</if>
  	</sql>
  	
 	<insert id="insertMember">
 		INSERT INTO tbl_member(user_id, user_pw, user_name, email, point, enabled, levels, reg_date)
-		VALUES(#{user_id}, #{user_pw}, #{user_name}, #{email},#{point},#{enabled},#{levels}, now())	
+		VALUES(#{user_id}, #{user_pw}, #{user_name}, #{email},#{point},#{enabled},#{levels}, sysdate)	
 	</insert>
 	
 	<select id="selectMember" resultType="org.edu.vo.MemberVO">
-		SELECT * FROM tbl_member
-		WHERE 1 = 1
-		<include refid="sqlWhere"/>
-		ORDER BY reg_date DESC <!-- ASC 오름차순 DESC 내림차순 -->
-		LIMIT #{startNo}, #{perPageNum}
+		<![CDATA[
+			SELECT T_Z.*
+			FROM(
+	    		SELECT ROWNUM AS RNUM, T_A.*
+	    		FROM
+	        		(
+	                    SELECT * FROM TBL_MEMBER 
+	                    WHERE 1 = 1 
+		]]>
+	                    <include refid="sqlWhere"></include>
+		<![CDATA[
+	                    ORDER BY REG_DATE DESC) T_A
+	                    WHERE ROWNUM <= (#{startNo}/#{perPageNum}+1) * #{perPageNum}
+	    			) T_Z
+			WHERE T_Z.RNUM > (#{startNo}/#{perPageNum}) * #{perPageNum}
+		]]>
 	</select>
 	
 	<select id="countUserId" resultType="int">
@@ -57,7 +68,7 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		point = #{point},
 		enabled = #{enabled},
 		levels = #{levels},
-		update_date = now()
+		update_date = sysdate
 		where user_id = #{user_id}
 	</update>
 	

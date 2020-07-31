@@ -5,18 +5,7 @@
 
 <!-- container -->
 <div id="container">
-	<!-- location_area -->
-	<div class="location_area member">
-		<div class="box_inner">
-			<h2 class="tit_page">스프링 <span class="in">in</span> 자바</h2>
-			<p class="location">고객센터 <span class="path">/</span> 공지사항 </p>
-			<ul class="page_menu clear">
-				<li><a href="javascript:;" class="on">회원가입</a></li>
-			</ul>
-		</div>
-	</div>	
-	<!-- //location_area -->
-
+	<%@ include file="../include/container_header.jsp"%>
 	<!-- bodytext_area -->
 	<div class="bodytext_area box_inner">
 		<!-- appForm -->
@@ -25,6 +14,16 @@
 				<legend>입력 양식</legend>
 				<p class="info_pilsoo pilsoo_item">필수입력</p>
 				<ul class="app_list">
+					<li class="clear">
+						<label for="bod_type_label" class="tit_lbl pilsoo_item">게시판 선택</label>
+						<div class="app_content">
+							<select name="bod_type" id="bod_type_label" class="select_common">
+									<option value="">게시판 선택</option>
+									<option value="notice" <c:out value="${boardVO.bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
+									<option value="gallery" <c:out value="${boardVO.bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option>
+							</select>
+						</div>
+					</li>
 					<li class="clear">
 						<label for="title_lbl" class="tit_lbl pilsoo_item">제목</label>
 						<div class="app_content"><input value="${boardVO.title}" name="title" type="text" class="w100p" id="title" name="title" placeholder="제목을 입력해주세요" required="required"></div>
