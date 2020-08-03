@@ -1,18 +1,34 @@
 package org.edu.controller;
 
+import java.util.List;
+
+import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import org.edu.service.IF_BoardService;
+import org.edu.vo.BoardTypeVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.servlet.ModelAndView;
 
 @ControllerAdvice
 public class ControllerAdviceException {
 	private static final Logger logger = LoggerFactory.getLogger(ControllerAdviceException.class);
 	
+	@Inject
+	private IF_BoardService boardService;
+	
+	//컨트롤러의 매핑이 걸린 모든 매서드 (jsp페이지)에서
+	//공통으로 boardTypeMenu변수 사용 가능.
+	@ModelAttribute("boardTypeMenu")
+	public List<BoardTypeVO> boardTypeMenu() throws Exception {
+		List<BoardTypeVO> boardTypeMenu = boardService.selectBoardType();
+		return boardTypeMenu;
+	}
 	@ExceptionHandler(Exception.class)
 	public ModelAndView errorModelAndView(Exception ex, HttpServletRequest request) {
 		//logger.info(ex.toString()); //콘솔출력

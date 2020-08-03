@@ -2,6 +2,7 @@ package org.edu.dao;
 
 import java.util.List;
 
+import org.edu.vo.BoardTypeVO;
 import org.edu.vo.BoardVO;
 import org.edu.vo.PageVO;
 
@@ -19,4 +20,8 @@ public interface IF_BoardDAO {
 	public void updateViewCount(Integer bno) throws Exception;
 	public void deleteBoardReply(Integer bno) throws Exception;
 	public int selectTopBno() throws Exception;
+	public List<BoardTypeVO> selectBoardType() throws Exception;
+	public void insertBoardType(BoardTypeVO boardTypeVO) throws Exception;
+	public void updateBoardType(BoardTypeVO boardTypeVO) throws Exception;
+	public void deleteBoardType(String bod_type) throws Exception;
 }

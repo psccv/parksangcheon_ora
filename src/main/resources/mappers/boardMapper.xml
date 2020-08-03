@@ -137,4 +137,22 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		DELETE FROM tbl_reply WHERE bno = #{bno}
 	</delete>
 	
+	<!-- 게시판 생성(아래) -->
+	<select id="selectBoardType" resultType="org.edu.vo.BoardTypeVO">
+		SELECT * FROM tbl_board_type ORDER BY bod_sun ASC
+	</select>
+	
+	<insert id="insertBoardType">
+		INSERT INTO tbl_board_type(bod_type, bod_name, bod_sun) VALUES(#{bod_type}, #{bod_name}, #{bod_sun})
+	</insert>
+	<update id="updateBoardType">
+		UPDATE tbl_board_type SET
+		bod_name = #{bod_name},
+		bod_sun = #{bod_sun}
+		WHERE bod_type = #{bod_type}
+	</update>
+	<delete id="deleteBoardType">
+		DELETE FROM tbl_board_type
+		WHERE bod_type = #{bod_type}
+	</delete>
 </mapper>
