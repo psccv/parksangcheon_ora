@@ -15,6 +15,7 @@ public interface IF_BoardService {
 	public List<String> selectAttach(Integer bno) throws Exception;
 	public int countBno(PageVO pageVO) throws Exception;
 	public List<BoardTypeVO> selectBoardType() throws Exception;
+	public BoardTypeVO viewBoardType(String bod_type) throws Exception;
 	public void insertBoardType(BoardTypeVO boardTypeVO) throws Exception;
 	public void updateBoardType(BoardTypeVO boardTypeVO) throws Exception;
 	public void deleteBoardType(String bod_type) throws Exception;

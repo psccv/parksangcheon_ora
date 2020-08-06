@@ -142,6 +142,10 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 		SELECT * FROM tbl_board_type ORDER BY bod_sun ASC
 	</select>
 	
+	<select id="viewBoardType" resultType="org.edu.vo.BoardTypeVO">
+		SELECT * FROM tbl_board_type WHERE bod_type = #{bod_type}
+	</select>
+	
 	<insert id="insertBoardType">
 		INSERT INTO tbl_board_type(bod_type, bod_name, bod_sun) VALUES(#{bod_type}, #{bod_name}, #{bod_sun})
 	</insert>

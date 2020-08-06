@@ -33,7 +33,7 @@
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">
-					<strong>게시판 목록</strong>
+					<strong>게시판 검색</strong>
 				</h3>
 				<br>
 				<div class="card-tools">
@@ -43,8 +43,11 @@
 							<select name="searchBoard" class="form-control" 
 								style="text-align-last: center; direction:inherit;">
 								<option value="">게시판 선택</option>
-								<option value="notice" <c:out value="${session_bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
-								<option value="gallery" <c:out value="${session_bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option>
+									<c:forEach items="${boardTypeMenu}" var="boardTypeMenu">
+										<option value="${boardTypeMenu.bod_type}" <c:out value="${session_bod_type eq boardTypeMenu.bod_type ? 'selected' : ''}"></c:out>>${boardTypeMenu.bod_name}</option>
+									</c:forEach>
+								<%-- <option value="notice" <c:out value="${session_bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
+								<option value="gallery" <c:out value="${session_bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option> --%>
 							</select>
 							<select class="form-control" name="searchType"
 								style="text-align-last: center; direction:inherit;">

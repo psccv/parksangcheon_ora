@@ -78,6 +78,11 @@ public class BoardServiceImpl implements IF_BoardService {
 	public List<BoardTypeVO> selectBoardType() throws Exception {
 		return boardDAO.selectBoardType();
 	}
+	
+	@Override
+	public BoardTypeVO viewBoardType(String bod_type) throws Exception {
+		return boardDAO.viewBoardType(bod_type);
+	}
 
 	@Override
 	public void insertBoardType(BoardTypeVO boardTypeVO) throws Exception {
@@ -93,4 +98,6 @@ public class BoardServiceImpl implements IF_BoardService {
 	public void deleteBoardType(String bod_type) throws Exception {
 		boardDAO.deleteBoardType(bod_type);
 	}
+
+	
 }

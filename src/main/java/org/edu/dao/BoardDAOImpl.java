@@ -94,6 +94,11 @@ public class BoardDAOImpl implements IF_BoardDAO {
 	public List<BoardTypeVO> selectBoardType() throws Exception {
 		return sqlSession.selectList(mapperQuery + ".selectBoardType");
 	}
+	
+	@Override
+	public BoardTypeVO viewBoardType(String bod_type) throws Exception {
+		return sqlSession.selectOne(mapperQuery + ".viewBoardType", bod_type);
+	}
 
 	@Override
 	public void insertBoardType(BoardTypeVO boardTypeVO) throws Exception {
@@ -109,5 +114,7 @@ public class BoardDAOImpl implements IF_BoardDAO {
 	public void deleteBoardType(String bod_type) throws Exception {
 		sqlSession.delete(mapperQuery + ".deleteBoardType", bod_type);
 	}
+
+	
 
 }

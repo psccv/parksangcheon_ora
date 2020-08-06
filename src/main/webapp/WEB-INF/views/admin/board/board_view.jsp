@@ -43,8 +43,11 @@
 						<select name="bod_type" class="form-control" 
 						style="text-align-last: center; direction:inherit;" required="required">
 								<option value="">게시판 선택</option>
-								<option value="notice" <c:out value="${boardVO.bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
-								<option value="gallery" <c:out value="${boardVO.bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option>
+								<c:forEach items="${boardTypeMenu}" var="boardTypeMenu">
+									<option value="${boardTypeMenu.bod_type}" <c:out value="${boardVO.bod_type eq boardTypeMenu.bod_type ? 'selected' : ''}"></c:out>>${boardTypeMenu.bod_name}</option>
+								</c:forEach>
+								<%-- <option value="notice" <c:out value="${boardVO.bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
+								<option value="gallery" <c:out value="${boardVO.bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option> --%>
 							</select>
 					</div>
 					<div class="form-group">

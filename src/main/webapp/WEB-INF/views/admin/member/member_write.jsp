@@ -39,22 +39,23 @@
 				<form role="form" action="/admin/member/write" method="POST">
 					<dr>
 					<div class="form-group">
-						<label>아이디</label> <input name="user_id" type="text" class="form-control"
+						<label>아이디</label> <input required="required" id="user_id" name="user_id" type="text" class="form-control"
 							placeholder="아이디">
 					</div>
+					<span id="msg_validation"></span>
 					<dr>
 					<div class="form-group">
-						<label>패스워드</label> <input name="user_pw" type="text" class="form-control"
+						<label>패스워드</label> <input required="required" name="user_pw" type="text" class="form-control"
 							placeholder="패스워드">
 					</div>
 					<dr>
 					<div class="form-group">
-						<label>이름</label> <input name="user_name" type="text" class="form-control"
+						<label>이름</label> <input required="required" name="user_name" type="text" class="form-control"
 							placeholder="이름">
 					</div>
 					<dr>
 					<div class="form-group">
-						<label>이메일</label> <input name="email" type="text" class="form-control"
+						<label>이메일</label> <input required="required" name="email" type="text" class="form-control"
 							placeholder="이메일">
 					</div>
 					<dr>
@@ -78,11 +79,11 @@
 							</select>
 						</div>
 						<dr>
-						<button type="submit" class="btn btn-default" 
+						<button disabled="disabled" id="btn_submit" type="submit" class="btn btn-default" 
 							style="background-color:yellow;">
 							<strong>등록</strong>
 						</button>
-						<a href="/admin/member/list" class="btn btn-default"
+						<a href="/admin/member/list?psge=${pageVO.page}" class="btn btn-default"
 							style="background-color:skyblue;">
 							<strong>돌아가기</strong>
 						</a>
@@ -95,7 +96,31 @@
 	<!-- /.content -->
 </div>
 <!-- /.content-wrapper -->
-
+<script>
+$(document).ready(function(){
+	$("#user_id").blur(function(){
+		var user_id = $("#user_id").val();
+		$.ajax({
+			type:'get',
+			url:'/admin/member/idcheck?user_id=' + user_id,
+			success:function(result){
+				if(result=='1'){ //중복 아이디가 존재할 때
+					$("#msg_validation").text("기존 사용자 아이디가 존개 합니다. 다른 아이디를 입력해 주세요!");
+					$("#msg_validation").css({"color":"red", "font-size":"14px"});
+					$("#btn_submit").attr("disabled", true);
+				}else{ // 중복 아이디가 존재하지 않을 때
+					$("#msg_validation").text("사용가능한 아이디 입니다.");
+					$("#msg_validation").css({"color":"red", "font-size":"14px"});
+					$("#btn_submit").attr("disabled", false);
+				}
+			},
+			error:function(){
+				alert("중복 아이디 체크 RestAPI 서버가 정상 작동하지 않습니다.")
+			}
+		});
+	});
+});
+</script>
 <%@ include file="../include/footer.jsp"%>
 
 

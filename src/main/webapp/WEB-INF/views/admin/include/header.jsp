@@ -111,6 +111,10 @@
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>회원 관리</p>
 								</a></li>
+								<li class="nav-item"><a href="/admin/bodtype/list"
+									class="nav-link"> <i class="far fa-circle nav-icon"></i>
+										<p>게시판 생성</p>
+								</a></li>
 								<li class="nav-item has-treeview"><a href="#"
 									class="nav-link"> <i class="far fa-circle nav-icon"></i>
 										<p>

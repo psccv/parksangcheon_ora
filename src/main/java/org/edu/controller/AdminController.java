@@ -1,15 +1,11 @@
 package org.edu.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Locale;
-import java.util.UUID;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -20,11 +16,9 @@ import org.edu.vo.BoardTypeVO;
 import org.edu.vo.BoardVO;
 import org.edu.vo.MemberVO;
 import org.edu.vo.PageVO;
-import org.springframework.core.io.FileSystemResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -44,9 +38,6 @@ public class AdminController {
 	private FileDataUtil fileDataUtil;
 	/**
 	 * 관리자 홈
-	 * @param locale
-	 * @param model
-	 * @return
 	 */
 	@RequestMapping(value = "", method = RequestMethod.GET)
 	public String home(Locale locale, Model model) {
@@ -55,9 +46,6 @@ public class AdminController {
 	
 	/**
 	 * 회원관리 목록 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/member/list", method = RequestMethod.GET)
@@ -78,9 +66,6 @@ public class AdminController {
 	
 	/**
 	 * 회원관리 상세보기 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/member/view", method = RequestMethod.GET)
@@ -93,9 +78,6 @@ public class AdminController {
 	
 	/**
 	 * 회원관리 등록 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/member/write", method = RequestMethod.GET)
@@ -118,9 +100,6 @@ public class AdminController {
 	
 	/**
 	 * 회원관리 수정 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/member/update", method = RequestMethod.GET)
@@ -146,9 +125,6 @@ public class AdminController {
 	
 	/**
 	 * 회원관리 삭제 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/member/delete", method = RequestMethod.POST)
@@ -158,13 +134,12 @@ public class AdminController {
 		return "redirect:/admin/member/list";
 	}
 	
+	
 /////////////////////////////////////////////////////////////////////////////////////////////
+	
 	
 	/**
 	 * 게시물관리 목록 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/board/list", method = RequestMethod.GET)
@@ -193,9 +168,6 @@ public class AdminController {
 	
 	/**
 	 * 게시물관리 상세보기 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/board/view", method = RequestMethod.GET)
@@ -217,9 +189,6 @@ public class AdminController {
 	
 	/**
 	 * 게시물관리 등록 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/board/write", method = RequestMethod.GET)
@@ -242,9 +211,6 @@ public class AdminController {
 	
 	/**
 	 * 게시물관리 수정 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/board/update", method = RequestMethod.GET)
@@ -279,9 +245,6 @@ public class AdminController {
 	
 	/**
 	 * 게시물관리 삭제 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/board/delete", method = RequestMethod.POST)
@@ -302,15 +265,96 @@ public class AdminController {
 	
 	/**
 	 * 게시판생성 목록 입니다.
-	 * @param locale
-	 * @param model
-	 * @return
 	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/bodtype/list", method = RequestMethod.GET)
 	public String bodTypeList(Locale locale, Model model) throws Exception {
 		List<BoardTypeVO> list = boardService.selectBoardType();
-		model.addAttribute("bodtypeList", list);
+		model.addAttribute("bodTypeList", list);
 		return "admin/bodtype/bodtype_list";
 	}
+	
+	/**
+	 * 게시판생성 insert 입니다.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/bodtype/write", method = RequestMethod.GET)
+	public String bodTypeInsert(Locale locale, Model model) throws Exception {
+		return "admin/bodtype/bodtype_write";
+	}
+	
+	/**
+	 * 게시판생성 insert 입니다.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/bodtype/write", method = RequestMethod.POST)
+	public String bodTypeInsert(BoardTypeVO boardTypeVO, Locale locale, Model model, RedirectAttributes rdat) throws Exception {
+		boardService.insertBoardType(boardTypeVO);
+		rdat.addFlashAttribute("msg", "writeSuccess");
+		return "redirect:/admin/bodtype/list";
+	}
+	
+	/**
+	 * 게시판생성 수정 입니다.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/bodtype/update", method = RequestMethod.GET)
+	public String bodTypeUpdate(@RequestParam("bod_type") String bod_type, Locale locale, Model model) throws Exception {
+		BoardTypeVO boardTypeVO = boardService.viewBoardType(bod_type);
+		model.addAttribute("bodTypeVO", boardTypeVO);
+		return "admin/bodtype/bodtype_update";
+	}
+	
+	/**
+	 * 게시판생성 수정 입니다.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/bodtype/update", method = RequestMethod.POST)
+	public String bodTypeUpdate(BoardTypeVO boardTypeVO, Locale locale, Model model, RedirectAttributes rdat) throws Exception {
+		boardService.updateBoardType(boardTypeVO);
+		rdat.addFlashAttribute("msg", "updateSuccess");
+		return "redirect:/admin/bodtype/list";
+	}
+	
+	/**
+	 * 게시판생성 삭제 입니다.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/bodtype/delete", method = RequestMethod.POST)
+	public String bodTypeDelete(BoardTypeVO boardTypeVO, Locale locale, RedirectAttributes rdat) throws Exception {
+		boardService.deleteBoardType(boardTypeVO.getBod_type());
+		rdat.addFlashAttribute("msg", "deleteSuccess");
+		return "redirect:/admin/bodtype/list";
+	}
+	
+	/**
+	 * 게시판 아이디 체크 RestAPI 입니다. 주) @ResponseBody 사용됨.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/bodtype/bodtype_check", method = RequestMethod.GET)
+	@ResponseBody
+	public int bodTypeCheck(@RequestParam("bod_type") String bod_type) throws Exception {
+		BoardTypeVO boardTypeVO = boardService.viewBoardType(bod_type);
+		int check = 0; //쿼리 결과값이 존재하는지 확인하는 변수
+		if(boardTypeVO!=null) {
+			check=1;
+		}
+		return check;
+	}
+	
+	/**
+	 * 회원 아이디 체크 RestAPI 입니다. 주) @ResponseBody 사용됨.
+	 * @throws Exception 
+	 */
+	@RequestMapping(value = "/member/idcheck", method = RequestMethod.GET)
+	@ResponseBody
+	public int idCheck(@RequestParam("user_id") String user_id) throws Exception {
+		MemberVO memberVO = memberService.viewMember(user_id);
+		int check = 0; //쿼리 결과값이 존재하는지 확인하는 변수
+		if(memberVO!=null) {
+			check=1;
+		}
+		return check;
+	}
+	
 }

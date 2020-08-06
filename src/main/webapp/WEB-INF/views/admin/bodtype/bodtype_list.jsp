@@ -33,34 +33,9 @@
 		<div class="card">
 			<div class="card-header">
 				<h3 class="card-title">
-					<strong>게시판 목록</strong>
+					<strong>게시판 생성 리스트</strong>
 				</h3>
 				<br>
-				<div class="card-tools">
-					<form action="/admin/board/list">
-						<div class="input-group"
-							style="width: 500px; positon: relative; padding: 5px; right: 98%;">
-							<select name="searchBoard" class="form-control" 
-								style="text-align-last: center; direction:inherit;">
-								<option value="">게시판 선택</option>
-								<option value="notice" <c:out value="${session_bod_type eq 'notice'?'selected':''}"></c:out>>공지사항</option>
-								<option value="gallery" <c:out value="${session_bod_type eq 'gallery'?'selected':''}"></c:out>>갤러리</option>
-							</select>
-							<select class="form-control" name="searchType"
-								style="text-align-last: center; direction:inherit;">
-								<option selected>전체</option>
-								<option>제목</option>
-								<option>내용</option>
-								<option>작성자</option>
-								<option>게시물 번호</option>
-							</select><input type="text" name="searchKeyword"
-								class="form-control float-right" placeholder="Search">
-							<div class="input-group-append">
-								<button type="submit" class="btn btn-default">검색</button>
-							</div>
-						</div>
-					</form>
-				</div>
 			</div>
 			<!-- /.card-header -->
 			<div class="card-body table-responsive p-0"
@@ -68,27 +43,19 @@
 				<table class="table table-hover text-nowrap">
 					<thead>
 						<tr>
-							<th>RNUM</th>
-							<th>제목</th>
-							<th>작성자</th>
-							<th>등록일</th>
-							<th>조회수</th>
-							<th>게시판타입</th>
+							<th>bod_sun</th>
+							<th>bod_type</th>
+							<th>bod_name</th>
 						</tr>
 					</thead>
 					<tbody>
-						<c:forEach items="${boardList}" var="boardVO" varStatus="status">
+						<c:forEach items="${bodTypeList}" var="boardTypeVO"
+							varStatus="status">
 							<tr>
-								<td>
-								<a href="/admin/board/view?bno=${boardVO.bno}&page=${pageVO.page}">${boardVO.rnum}</a></td>
-								<td>
-								<a href="/admin/board/view?bno=${boardVO.bno}&page=${pageVO.page}">${boardVO.title}</a></td>
-								<td>${boardVO.writer}</td>
-								<td>
-								<fmt:formatDate pattern="yyyy-MM-dd HH:mm:ss" value="${boardVO.regdate}"/>
-								</td>
-								<td>${boardVO.view_count}</td>
-								<td>${boardVO.bod_type}</td>
+								<td>${boardTypeVO.bod_sun}</td>
+								<td><a
+									href="/admin/bodtype/update?bod_type=${boardTypeVO.bod_type}">${boardTypeVO.bod_type}</a></td>
+								<td>${boardTypeVO.bod_name}</td>
 							</tr>
 						</c:forEach>
 					</tbody>
@@ -98,31 +65,9 @@
 		</div>
 		<!-- /.card -->
 		<div>
-
-			<a href="/admin/board/write" class="btn btn-default"
-				style="background-color: #148CFF;"> <strong>글쓰기</strong>
-			</a>
-			<nav aria-label="Contacts Page Navigation">
-				<ul class="pagination" style="position: relative; left: 30%;">
-					<c:if test="${pageVO.prev}">
-						<li class="page-item"><a class="page-link"
-							href="/admin/board/list?page=${pageVO.startPage-1}&searchType=${pageVO.searchType}&searchKeyword=${pageVO.searchKeyword}">이전</a></li>
-					</c:if>
-					<c:forEach begin="${pageVO.startPage}" end="${pageVO.endPage}"
-						var="idx">
-						<li
-							class='page-item <c:out value="${idx==pageVO.page?'active':''}"/>'>
-							<a href="/admin/board/list?page=${idx}&searchType=${pageVO.searchType}&searchKeyword=${pageVO.searchKeyword}"
-							class="page-link">${idx} </a>
-						</li>
-					</c:forEach>
-					<c:if test="${pageVO.next}">
-						<li class="page-item"><a class="page-link"
-							href="/admin/board/list?page=${pageVO.endPage+1}&searchType=${pageVO.searchType}&searchKeyword=${pageVO.searchKeyword}">다음</a></li>
-					</c:if>
-				</ul>
-			</nav>
-			<br>
+			<a href="/admin/bodtype/write" class="btn btn-default"
+				style="background-color: #148CFF;"> <strong>게시판 생성</strong>
+			</a> <br>
 		</div>
 	</div>
 	<!-- /.content -->
