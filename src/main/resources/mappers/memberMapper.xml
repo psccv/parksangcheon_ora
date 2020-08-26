@@ -15,6 +15,13 @@ PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
 
 
 <mapper namespace="org.edu.dao.IF_MemberDAO">
+	<!-- 6개월간 회원정보 수정을 안한 회원 출력 -->
+	<select id="testJobMethod" resultType="org.edu.vo.MemberVO">
+		SELECT * FROM tbl_member
+		<![CDATA[
+		WHERE update_date < ADD_MONTHS(SYSDATE, -6) 
+		]]>
+	</select>
 	<!-- 공통사용 검색 쿼리 -->
  	<sql id="sqlWhere">
  		<if test="searchType != null">
